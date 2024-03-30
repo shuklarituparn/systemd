@@ -171,3 +171,59 @@ When the service is initialized the socket will be passed to it, to process any 
 
 
 
+ListenStream=: This defines an address for a stream socket which supports sequential, reliable communication. Services that use TCP should use this socket type.
+
+ListenDatagram=: This defines an address for a datagram socket which supports fast, unreliable communication packets. Services that use UDP should set this socket type.
+
+ListenSequentialPacket=: This defines an address for sequential, reliable communication with max length datagrams that preserves message boundaries. This is found most often for Unix sockets.
+
+ListenFIFO: Along with the other listening types, you can also specify a FIFO buffer instead of a socket.
+
+
+
+
+Accept=: This determines whether an additional instance of the service will be started for each connection. If set to false (the default), one instance will handle all connections.
+
+
+SocketUser=: With a Unix socket, specifies the owner of the socket. This will be the root user if left unset.
+
+SocketGroup=: With a Unix socket, specifies the group owner of the socket. This will be the root group if neither this or the above are set. If only the SocketUser= is set, systemd will try to find a matching group.
+
+SocketMode=: For Unix sockets or FIFO buffers, this sets the permissions on the created entity.
+
+Service=: If the service name does not match the .socket name, the service can be specified with this directive.
+
+
+The [Path] Section
+
+A path unit defines a filesystem path that systmed can monitor for changes. Another unit must exist that will be be activated when certain activity is detected at the path location. Path activity is determined thorugh inotify events.
+
+The [Path] section of a unit file can contain the following directives:
+
+    PathExists=: This directive is used to check whether the path in question exists. If it does, the associated unit is activated.
+    PathExistsGlob=: This is the same as the above, but supports file glob expressions for determining path existence.
+    PathChanged=: This watches the path location for changes. The associated unit is activated if a change is detected when the watched file is closed.
+    PathModified=: This watches for changes like the above directive, but it activates on file writes as well as when the file is closed.
+    DirectoryNotEmpty=: This directive allows systemd to activate the associated unit when the directory is no longer empty.
+    Unit=: This specifies the unit to activate when the path conditions specified above are met. If this is omitted, systemd will look for a .service file that shares the same base unit name as this unit.
+    MakeDirectory=: This determines if systemd will create the directory structure of the path in question prior to watching.
+    DirectoryMode=: If the above is enabled, this will set the permission mode of any path components that must be created.
+
+
+
+The [Timer] Section
+
+Timer units are used to schedule tasks to operate at a specific time or after a certain delay. This unit type replaces or supplements some of the functionality of the cron and at daemons. An associated unit must be provided which will be activated when the timer is reached.
+
+The [Timer] section of a unit file can contain some of the following directives:
+
+    OnActiveSec=: This directive allows the associated unit to be activated relative to the .timer unit’s activation.
+    OnBootSec=: This directive is used to specify the amount of time after the system is booted when the associated unit should be activated.
+    OnStartupSec=: This directive is similar to the above timer, but in relation to when the systemd process itself was started.
+    OnUnitActiveSec=: This sets a timer according to when the associated unit was last activated.
+    OnUnitInactiveSec=: This sets the timer in relation to when the associated unit was last marked as inactive.
+    OnCalendar=: This allows you to activate the associated unit by specifying an absolute instead of relative to an event.
+    AccuracySec=: This unit is used to set the level of accuracy with which the timer should be adhered to. By default, the associated unit will be activated within one minute of the timer being reached. The value of this directive will determine the upper bounds on the window in which systemd schedules the activation to occur.
+    Unit=: This directive is used to specify the unit that should be activated when the timer elapses. If unset, systemd will look for a .service unit with a name that matches this unit.
+    Persistent=: If this is set, systemd will trigger the associated unit when the timer becomes active if it would have been triggered during the period in which the timer was inactive.
+    WakeSystem=: Setting this directive allows you to wake a system from suspend if the timer is reached when in that state.
