@@ -234,4 +234,6 @@ ExecStartPre=/usr/bin/nohup /bin/bash /home/tools/imgproxy/start.sh </dev/null >
 
 Nohup, short for no hang up is a command in Linux systems that keep processes running even after exiting the shell or terminal
 
+Oneshot services are systemd services that perform a specific task and terminate upon completion of that task.
+In other words, the process is short-lived. We can periodically start a systemd service using a timer and a oneshot service.
 
