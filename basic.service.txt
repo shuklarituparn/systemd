@@ -67,3 +67,107 @@ when we run the system
 
 sockets.target, basic.target, timers.target, and paths.target. are also different type of targets
 
+
+RequiredBy=: This directive is very similar to the WantedBy= directive, but instead specifies a required dependency that
+will cause the activation to fail if not met. When enabled, a unit with this directive will create a directory ending with .requires.
+
+
+Alias=: This directive allows the unit to be enabled under another name as well. Among other uses, this allows multiple
+providers of a function to be available, so that related units can look for any provider of the common aliased name.
+
+Also=: This directive allows units to be enabled or disabled as a set. Supporting units that should always be
+available when this unit is active can be listed here. They will be managed as a group for installation tasks.
+
+DefaultInstance=: For template units (covered later) which can produce unit instances with unpredictable names,
+this can be used as a fallback value for the name if an appropriate name is not provided.
+
+
+[Service]
+
+The service section is used to provide the configuration that is only applicable to the service
+
+
+Type= it can be one of the following
+
+* Simple:= This is the default if the type and the busname directives are not set
+
+* forking: This service type is used when the service forks a child process, exiting the parent process almost immediately.
+This tells systemd that the process is still running even though the parent exited.
+
+* oneshot: This type indicates that the process will be short-lived and that systemd should wait for the process to exit
+before continuing on with other units. This is the default Type= and ExecStart= are not set. It is used for one-off tasks.
+
+
+* dbus: This indicates that unit will take a name on the D-Bus bus. When this happens, systemd will continue to process the next unit.
+
+*notify: This indicates that the service will issue a notification when it has finished starting up.
+The systemd process will wait for this to happen before proceeding to other units.
+
+
+*idle: This indicates that the service will not be run until all jobs are dispatched.
+
+
+
+RemainAfterExit=: This directive is commonly used with the oneshot type. It indicates that the service should be
+ considered active even after the process exits.
+
+PIDFile=: If the service type is marked as “forking”, this directive is used to set the path of the file that should
+contain the process ID number of the main child that should be monitored.
+
+
+BusName=: This directive should be set to the D-Bus bus name that the service will attempt to acquire when using the
+“dbus” service type.
+
+
+
+NotifyAccess=: This specifies access to the socket that should be used to listen for notifications when the “notify”
+service type is selected This can be “none”, “main”, or "all. The default, “none”, ignores all status messages.
+The “main” option will listen to messages from the main process and the “all” option will cause all members of the
+service’s control group to be processed.
+
+
+The following directives describes how we manage our service and it can be done as
+
+ExecStart= This directive takes the path and the command needed to start the service. If path to the command is precided
+by dash. A non zero exit code will be accepted and the unit activation won't be marked as failed
+
+ExecStartPre=: This can be used to provide additional commands that should be executed before the main process is started.
+This can be used multiple times. Again, commands must specify a full path and they can be preceded by “-” to indicate
+that the failure of the command will be tolerated.
+
+
+ExecStartPost=: This has the same exact qualities as ExecStartPre= except that it specifies commands that will be run after the main process is started.
+
+
+ExecReload=: This optional directive indicates the command necessary to reload the configuration of the service if available.
+
+
+ExecStop=: This indicates the command needed to stop the service. If this is not given, the process will be killed immediately when the service is stopped.
+
+
+ExecStopPost=: This can be used to specify commands to execute following the stop command.
+
+
+RestartSec=: If automatically restarting the service is enabled, this specifies the amount of time to wait before attempting to restart the service.
+
+
+Restart=: This indicates the circumstances under which systemd will attempt to automatically restart the service.
+This can be set to values like “always”, “on-success”, “on-failure”, “on-abnormal”, “on-abort”, or “on-watchdog”.
+These will trigger a restart according to the way that the service was stopped.
+
+
+TimeoutSec=: This configures the amount of time that systemd will wait when stopping or stopping the service before
+marking it as failed or forcefully killing it. You can set separate timeouts with TimeoutStartSec= and TimeoutStopSec= as well.
+
+
+[Socket]
+
+Each socket unit must have a matching service unit that will be activated if the socket receives activity
+
+By default the socket name will attempt to start the service of the same name upon receiving a connection.
+
+When the service is initialized the socket will be passed to it, to process any buffered requests
+
+
+
+
