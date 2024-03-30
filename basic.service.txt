@@ -1,0 +1,26 @@
+# Systemd files are case-sensitive, so [UNIT] is different from [Unit]
+
+[Unit]
+
+Description= This is used to describe the basic functionality
+Requires=  This directive lists all the unit files on which this current unit file depends
+
+If any of the unit files in the required failed to start, this unit file wont start either
+
+
+Wants= Basically the same as the required but less restrictive. It would want the dependent unit files to be start parallely
+but would continue working even if they don't start
+
+BindsTo=  This also same as require but the current unit will also stop if the associated one stops
+
+Before= The units decribed here wont start until the current unit starts
+
+After= The unit listed in the directive will be started before starting the current unit
+
+
+Conflicts= This is used to list all the unit files that can create conflicts if started at the same time. Starting a
+unit with this relationship will make the other unit stop
+
+Condition...= this used to provide a condition, if the condition is not met then the unit skips and is not executed
+
+Assert...= basically same as condition but a negative result causes the failure of the unit to start
