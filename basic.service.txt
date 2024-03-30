@@ -227,3 +227,11 @@ The [Timer] section of a unit file can contain some of the following directives:
     Unit=: This directive is used to specify the unit that should be activated when the timer elapses. If unset, systemd will look for a .service unit with a name that matches this unit.
     Persistent=: If this is set, systemd will trigger the associated unit when the timer becomes active if it would have been triggered during the period in which the timer was inactive.
     WakeSystem=: Setting this directive allows you to wake a system from suspend if the timer is reached when in that state.
+
+
+ExecStartPre=/usr/bin/nohup /bin/bash /home/tools/imgproxy/start.sh </dev/null >/dev/null 2>&1 &
+
+
+Nohup, short for no hang up is a command in Linux systems that keep processes running even after exiting the shell or terminal
+
+
