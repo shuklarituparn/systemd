@@ -24,3 +24,46 @@ unit with this relationship will make the other unit stop
 Condition...= this used to provide a condition, if the condition is not met then the unit skips and is not executed
 
 Assert...= basically same as condition but a negative result causes the failure of the unit to start
+
+
+[INSTALL]
+
+This section is optional and is used to define the behavior or a unit if it is enabled or disabled. Enabling a unit
+marks it to be automatically started at boot.
+
+WantedBy= This is to describe how the unit should be enabled,
+
+IT  can be of many types for example
+
+WantedBy= multi-user.target  (Means that the service would be automatically started when the system boots up and reaches
+a multiuser target state, which is the target state that is reached when the system is booted up and is ready for normal
+operation
+
+The different type of target there are:
+
+1. default.target := default target that starts when the system boots up (runlevel 5 in sysVinit)
+2. multi-user.target:= also when the system is booted up and ready for normal operation
+3. graphical.target:=  reached when the system boots and is ready for graphical interaction. Level 5 in sysVinit
+4. rescue.target:=   reached when the system is in the minimum rescue state, and is level 1 in sysVinit
+5. shutdown.target:= reached when the system is shutting down
+6. network-online.target:= service should be started when the network is up and running
+
+SYSVINIT:
+
+7 runlevels in SysVinit:
+
+    0: Halt: This runlevel is used to halt the system, and it is equivalent to the poweroff command.
+    1: Single-user mode: This runlevel is used to start the system in single-user mode, which is a minimal system state that is used for maintenance and recovery.
+    2: Multi-user mode without networking: This runlevel is used to start the system in multi-user mode without networking, which is similar to the single-user mode but with more services started.
+    3: Multi-user mode with networking: This runlevel is used to start the system in multi-user mode with networking, which is a fully functional system state that is used for normal operation.
+    4: Not used/User-definable: This runlevel is not used by default and it is intended to be used for custom purposes.
+    5: Multi-user mode with GUI: This runlevel is used to start the system in multi-user mode with a graphical user interface, which is similar to the runlevel 3 with the addition of the X Window System.
+    6: Reboot: This runlevel is used to reboot the system, and it is equivalent to the reboot command.
+
+system V init is unix like OS Management service. System that manages the start and the shutdown of the system
+
+The scripts are located in the /etc/init.d/ and is executed by the init process, that is the first process to run
+when we run the system
+
+sockets.target, basic.target, timers.target, and paths.target. are also different type of targets
+
