@@ -1,0 +1,47 @@
+Now, we need to add configuration in rsyslog so that it knows how to handle the logs we’ll be sending it.
+Let’s add the following to a new file /etc/rsyslog.d/bird_watching.conf:
+
+if $programname == 'bird_watching' then /var/log/bird_watching.log
+& stop
+
+
+after if $programme= "we can give our service name here"
+
+
+Now making the file so that the syslog user can access and write to it
+
+touch /var/log/bird_watching.log
+chown syslog /var/log/bird_watching.log
+ls -l /var/log/bird_watching.log
+-rw-r----- 1 syslog adm 122664 Feb  1 04:17 /var/log/bird_watching.log
+
+
+To check if its working
+systemctl restart rsyslog
+tail -f /var/log/bird_watching.log
+Feb  1 04:12:41 localhost bird_watching[2188458]: Black-capped chickadee
+Feb  1 04:13:42 localhost bird_watching[2188511]: Baltimore oriole
+Feb  1 04:14:56 localhost bird_watching[2188564]: House sparrow
+Feb  1 04:15:57 localhost bird_watching[2188620]: Northern cardinal
+Feb  1 04:17:11 localhost bird_watching[2188709]: Blue jay
+
+
+#If running a new version of systemd
+
+[Unit]
+Description=Bird watching service
+
+[Service]
+Type=oneshot
+ExecStart=/etc/systemd/system/bird_watcher.sh
+
+StandardOutput=append:/var/log/bird_watching.log
+StandardError=append:/var/log/bird_watching.log
+
+[Install]
+WantedBy=multi-user.target
+
+This will create the file if not exists and append to it
+
+
+This option lacks the additional details (timestamps) of the rsyslog approach from above but has the benefit of not requiring an additional syslog daemon.

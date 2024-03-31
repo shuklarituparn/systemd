@@ -1,0 +1,21 @@
+[Unit]
+Description=My Java forking service
+After=syslog.target network.target
+[Service]
+SuccessExitStatus=143
+User=appuser
+Group=appgroup
+
+Type=forking
+
+ExecStart=/path/to/wrapper
+ExecStop=/bin/kill -15 $MAINPID
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+#Forking is used to symbolize that the main process will exit and the system should monitor the child process
+#Type is forking as we set all the java variables using shell script
+

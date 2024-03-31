@@ -1,0 +1,18 @@
+sudo systemctl daemon-reload  -- After making any changes to the unit files we need it
+
+sudo systemctl start javasimple.service    -- To start the service
+sudo systemctl status javasimple.service     --To get the status of the service
+● javasimple.service - My Java driven simple service
+Loaded: loaded (/etc/systemd/system/javasimple.service; <strong>disabled</strong>; vendor preset: disabled)
+Active: active (running) since Sun 2021-01-17 20:10:19 CET; 8s ago
+Main PID: 8124 (java)
+CGroup: /system.slice/javasimple.service
+└─8124 /path/to/jvmdir/bin/java -jar javaapp.jar
+
+
+
+sudo systemctl enable javasimple.service
+Created symlink from /etc/systemd/system/multi-user.target.wants/javasimple.service to /etc/systemd/system/javasimple.service
+
+
+

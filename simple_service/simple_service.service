@@ -1,0 +1,28 @@
+[Unit]
+
+Description= An example of a sample service
+
+#Means after the syslog service is active and the network is up
+After= syslog.target network.target
+
+[Service]
+
+SuccessExitStatus=143
+
+User=appuser
+Group=appgroup
+
+#Simple as we just want to start the process directly without starting a child process
+Type=simple
+
+Environment="JAVA_HOME=/path/to/jvmdir"
+WorkingDirectory=/path/to/app/workdir
+ExecStart=${JAVA_HOME}/bin/java -jar javaapp.jar
+#Asking systemd to send a termination signal
+#JVM designers made Java return a non-zero exit code in case it is terminated by a system signal. They took 128, and the resulting exit code is a sum of 128 and the signal numeric value.
+# SuccessExitStatus to 143, we tell systemd to handle that value (128+15) as a normal exit.
+ExecStop=/bin/kill -15 $MAINPID
+
+[Install]
+WantedBy=multi-user.target
+

@@ -1,0 +1,11 @@
+[Unit]
+Description=Bird watching service
+
+[Service]
+Type=oneshot
+
+#When made active this will run the shell script that we have defined here
+ExecStart=/etc/systemd/system/bird_watcher.sh
+
+[Install]
+WantedBy=multi-user.target

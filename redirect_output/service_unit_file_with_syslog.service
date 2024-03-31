@@ -1,0 +1,17 @@
+[Unit]
+Description=Bird watching service
+
+[Service]
+Type=oneshot
+ExecStart=/etc/systemd/system/bird_watcher.sh
+
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=bird_watching
+
+[Install]
+WantedBy=multi-user.target
+
+
+#systemctl daemon-reload we do this to reload the daemon
+

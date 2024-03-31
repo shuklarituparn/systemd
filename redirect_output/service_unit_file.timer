@@ -1,0 +1,15 @@
+[Unit]
+Description=Activate bird_watching.service every minute
+
+#It activates our service based on the time it has been inactive so far
+[Timer]
+OnUnitInactiveSec=1m
+
+[Install]
+WantedBy=timers.target
+
+
+#systemctl daemon-reload
+#systemctl --now enable bird_watching.timer
+
+#We don't enable the service, but just the timer associated with it
